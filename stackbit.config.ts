@@ -19,6 +19,12 @@ export default defineStackbitConfig({
           filePath: "content/pages/{slug}.json",
           fields: [
             {
+              name: "slug",
+              type: "slug",
+              label: "Slug",
+              required: true,
+            },
+            {
               name: "title",
               type: "string",
               label: "Title",
