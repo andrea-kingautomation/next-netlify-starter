@@ -1,11 +1,14 @@
-import styles from './Footer.module.css'
+import styles from "./Footer.module.css";
 
-export default function Footer() {
+export default function Footer({ logo, logoAlt }) {
   return (
-    <>
-      <footer className={styles.footer}>
-        <img src="/logo-netlify.svg" alt="Netlify Logo" className={styles.logo} />
-      </footer>
-    </>
-  )
+    <footer className={styles.footer} data-sb-field-path=".footer">
+      <img
+        src={logo || "/logo-netlify.svg"}
+        alt={logoAlt || "Netlify Logo"}
+        className={styles.logo}
+        data-sb-field-path=".footer.logo"
+      />
+    </footer>
+  );
 }

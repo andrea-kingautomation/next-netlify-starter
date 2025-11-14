@@ -1,0 +1,8 @@
+{
+  "title": "Welcome to my app!",
+  "description": "Get started by editing pages/index.js",
+  "footer": {
+    "logo": "/logo-netlify.svg",
+    "logoAlt": "Netlify Logo"
+  }
+}
