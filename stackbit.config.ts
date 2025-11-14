@@ -1,4 +1,5 @@
 import { defineStackbitConfig } from "@stackbit/types";
+import { GitContentSource } from "@stackbit/cms-git";
 
 export default defineStackbitConfig({
   stackbitVersion: "~0.6.0",
@@ -6,14 +7,15 @@ export default defineStackbitConfig({
   ssgName: "nextjs",
 
   contentSources: [
-    {
-      type: "git",
-
+    new GitContentSource({
+      rootPath: __dirname,
+      contentDirs: ["content"],
       models: [
         {
           name: "page",
           type: "page",
           label: "Page",
+          urlPath: "/{slug}",
           filePath: "content/pages/{slug}.json",
           fields: [
             {
@@ -66,19 +68,24 @@ export default defineStackbitConfig({
           ],
         },
       ],
-    },
+    }),
   ],
 
-  siteMap: ({ documents }) => {
-    return documents
-      .filter((doc) => doc.modelName === "page")
-      .map((page) => ({
-        stableId: page.id,
-        urlPath: page.slug === "index" ? "/" : `/${page.slug}`,
-        document: page,
-        label: page.title || "Untitled Page",
-      }));
-  },
+  siteMap: ({ documents, models }) => {
+    const pageModels = models.filter((m) => m.type === "page");
 
-  postInstallCommand: "npm i --no-save @stackbit/types",
+    return documents
+      .filter((d) => pageModels.some((m) => m.name === d.modelName))
+      .map((document) => {
+        const isHomePage = document.slug === "index";
+
+        return {
+          stableId: document.id,
+          urlPath: isHomePage ? "/" : `/${document.slug}`,
+          document,
+          label: document.title || "Untitled Page",
+          isHomePage,
+        };
+      });
+  },
 });
